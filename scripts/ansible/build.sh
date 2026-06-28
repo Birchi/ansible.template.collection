@@ -58,6 +58,11 @@ parse_cmd_args "$@"
 
 readme_path=${collection_directory_path}/README.md
 license_path=${collection_directory_path}/LICENSE
+galaxy_yml_path=${collection_directory_path}/galaxy.yml
+
+if ! [ -f ${galaxy_yml_path} ] ; then
+    error "Missing galaxy.yml in collection."
+fi
 
 if ! [ -f ${readme_path} ] ; then
     log WARN "Missing README.md in collection."
@@ -73,4 +78,7 @@ if [ -d ${readme_path} ] ; then
     rm -rf ${output_file_path}
 fi
 
-cd ${collection_directory_path} && ansible-galaxy collection build --force --output-path ${output_file_path}
+log INFO "Building ansible galaxy collection."
+cd ${collection_directory_path} && ansible-galaxy collection build --force --output-path ${output_file_path} > /dev/null 2>&1
+log INFO "Built ansible galaxy collection."
+

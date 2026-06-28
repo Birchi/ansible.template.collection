@@ -82,5 +82,5 @@ if [ -d ${readme_path} ] ; then
 fi
 
 log INFO "Building ansible galaxy collection ${namespace_name}.${collection_name}."
-cd ${collection_directory} && ansible-galaxy collection build --force --output-path ${output_directory} > /dev/null 2>&1
+cd ${collection_directory} && ansible-galaxy collection build --force --output-path ../${output_directory} > /dev/null 2>&1
 log DEBUG "Built ansible galaxy collection ${namespace_name}.${collection_name}."

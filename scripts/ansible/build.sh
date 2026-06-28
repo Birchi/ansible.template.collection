@@ -56,6 +56,9 @@ function parse_cmd_args() {
 
 parse_cmd_args "$@"
 
+namespace_name=$(get_namespace)
+collection_name=$(get_collection)
+
 readme_path=${collection_directory_path}/README.md
 license_path=${collection_directory_path}/LICENSE
 galaxy_yml_path=${collection_directory_path}/galaxy.yml
@@ -78,7 +81,7 @@ if [ -d ${readme_path} ] ; then
     rm -rf ${output_file_path}
 fi
 
-log INFO "Building ansible galaxy collection."
+log INFO "Building ansible galaxy collection ${namespace_name}.${collection_name}."
 cd ${collection_directory_path} && ansible-galaxy collection build --force --output-path ${output_file_path} > /dev/null 2>&1
-log DEBUG "Built ansible galaxy collection."
+log INFO "Built ansible galaxy collection ${namespace_name}.${collection_name}."
 

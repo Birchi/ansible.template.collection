@@ -80,5 +80,5 @@ fi
 
 log INFO "Building ansible galaxy collection."
 cd ${collection_directory_path} && ansible-galaxy collection build --force --output-path ${output_file_path} > /dev/null 2>&1
-log INFO "Built ansible galaxy collection."
+log DEBUG "Built ansible galaxy collection."
 

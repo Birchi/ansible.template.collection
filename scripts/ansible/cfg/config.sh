@@ -11,4 +11,4 @@
 LOG_LEVEL=INFO
 # Build
 collection_directory_path=./collection
-output_file_path=build/
+output_file_path=./build

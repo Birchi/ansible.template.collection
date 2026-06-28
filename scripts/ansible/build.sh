@@ -68,5 +68,9 @@ if ! [ -f ${license_path} ] ; then
     cp LICENSE ${license_path}
     log DEBUG "Copied LICENSE to  ${license_path}"
 fi
-mkdir build
-cd ${output_file_path} && ansible-galaxy collection build --force --output-path ${output_file_path}
+
+if [ -d ${readme_path} ] ; then
+    rm -rf ${output_file_path}
+fi
+
+cd ${collection_directory_path} && ansible-galaxy collection build --force --output-path ${output_file_path}

@@ -56,12 +56,14 @@ function parse_cmd_args() {
 
 parse_cmd_args "$@"
 
-namespace_name=$(get_namespace)
-collection_name=$(get_collection)
 
 readme_path=${collection_directory_path}/README.md
 license_path=${collection_directory_path}/LICENSE
 galaxy_yml_path=${collection_directory_path}/galaxy.yml
+
+namespace_name=$(get_namespace ${galaxy_yml_path})
+collection_name=$(get_collection ${galaxy_yml_path})
+
 
 if ! [ -f ${galaxy_yml_path} ] ; then
     error "Missing galaxy.yml in collection."

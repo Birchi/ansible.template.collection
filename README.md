@@ -2,6 +2,47 @@
 
 An Ansible collection template.
 
+## Collection Structure
+
+```
+namespace/
+└── collection/
+    ├── galaxy.yml              # Collection metadata (name, version, dependencies)
+    ├── README.md
+    ├── LICENSE
+    ├── meta/
+    │   └── runtime.yml         # Ansible version requirements, plugin routing
+    ├── docs/                   # Extra documentation
+    ├── plugins/
+    │   ├── modules/            # Custom modules (.py)
+    │   ├── module_utils/       # Shared module helpers
+    │   ├── lookup/             # Lookup plugins
+    │   ├── filter/             # Filter plugins (Jinja2)
+    │   ├── test/               # Test plugins (Jinja2)
+    │   ├── inventory/          # Dynamic inventory plugins
+    │   ├── callback/           # Callback plugins (output/logging)
+    │   ├── connection/         # Connection plugins
+    │   └── vars/               # Vars plugins
+    ├── roles/
+    │   └── my_role/
+    │       ├── tasks/
+    │       │   └── main.yml
+    │       ├── handlers/
+    │       │   └── main.yml
+    │       ├── defaults/
+    │       │   └── main.yml    # Low-priority default variables
+    │       ├── vars/
+    │       │   └── main.yml    # High-priority role variables
+    │       ├── files/          # Static files for copy/script tasks
+    │       ├── templates/      # Jinja2 templates
+    │       └── meta/
+    │           └── main.yml    # Role dependencies
+    ├── playbooks/              # Standalone playbooks
+    └── tests/
+        ├── integration/        # Integration tests (ansible-test)
+        └── unit/               # Unit tests (ansible-test)
+```
+
 ## Requirements
 
 - Ansible >= 2.9

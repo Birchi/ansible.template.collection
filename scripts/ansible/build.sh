@@ -20,18 +20,18 @@ function usage() {
 This script builds an ansible collection according the collection folder.
 
 Parameters:
-  -c, --collection-directory-path     Sets the path of the output file path. Default value is '${collection_directory_path}'.
-  -f, --output-directory-path     Sets the path of the output file path. Default value is '${output_file_path}'.
+  -c, --collection-directory     Sets the path of the output file path. Default value is '${collection_directory}'.
+  -f, --output-directory     Sets the path of the output file path. Default value is '${output_directory}'.
 
 Examples:
-  $(dirname $0)/build.sh -c ${collection_directory_path} -f "${output_file_path}"
-  $(dirname $0)/build.sh --collection-directory-path ${collection_directory_path} --output-directory-path "${output_file_path}"
+  $(dirname $0)/build.sh -c ${collection_directory} -f "${output_directory}"
+  $(dirname $0)/build.sh --collection-directory ${collection_directory} --output-directory "${output_directory}"
 EOF
 }
 
 function parse_cmd_args() {
     args=$(getopt --options f: \
-                  --longoptions output-directory-path:,collection-directory-path: -- "$@")
+                  --longoptions output-directory:,collection-directory: -- "$@")
 
     if [[ $? -ne 0 ]]; then
         echo "Failed to parse arguments!" && usage
@@ -41,8 +41,8 @@ function parse_cmd_args() {
     while test $# -ge 1 ; do
         case "$1" in
             -h | --help) usage && exit 0 ;;
-            -c | --collection-directory-path) collection_directory_path="$(eval echo $2)" ; shift 1 ;;
-            -f | --output-directory-path) output_file_path="$(eval echo $2)" ; shift 1 ;;
+            -c | --collection-directory) collection_directory="$(eval echo $2)" ; shift 1 ;;
+            -f | --output-directory) output_directory="$(eval echo $2)" ; shift 1 ;;
             --) ;;
              *) ;;
         esac
@@ -56,18 +56,16 @@ function parse_cmd_args() {
 
 parse_cmd_args "$@"
 
-
-readme_path=${collection_directory_path}/README.md
-license_path=${collection_directory_path}/LICENSE
-galaxy_yml_path=${collection_directory_path}/galaxy.yml
-
-namespace_name=$(get_namespace ${galaxy_yml_path})
-collection_name=$(get_collection ${galaxy_yml_path})
-
+readme_path=${collection_directory}/README.md
+license_path=${collection_directory}/LICENSE
+galaxy_yml_path=${collection_directory}/galaxy.yml
 
 if ! [ -f ${galaxy_yml_path} ] ; then
     error "Missing galaxy.yml in collection."
 fi
+
+namespace_name=$(get_namespace ${galaxy_yml_path})
+collection_name=$(get_collection ${galaxy_yml_path})
 
 if ! [ -f ${readme_path} ] ; then
     log WARN "Missing README.md in collection."
@@ -80,10 +78,9 @@ if ! [ -f ${license_path} ] ; then
 fi
 
 if [ -d ${readme_path} ] ; then
-    rm -rf ${output_file_path}
+    rm -rf ${output_directory}
 fi
 
 log INFO "Building ansible galaxy collection ${namespace_name}.${collection_name}."
-cd ${collection_directory_path} && ansible-galaxy collection build --force --output-path ${output_file_path} > /dev/null 2>&1
+cd ${collection_directory} && ansible-galaxy collection build --force --output-path ${output_directory} > /dev/null 2>&1
 log DEBUG "Built ansible galaxy collection ${namespace_name}.${collection_name}."
-

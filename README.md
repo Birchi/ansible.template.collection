@@ -6,7 +6,7 @@ An Ansible collection template.
 
 ```
 namespace/
-└── collection/
+    collection/
     ├── galaxy.yml              # Collection metadata (name, version, dependencies)
     ├── README.md
     ├── LICENSE
@@ -43,17 +43,12 @@ namespace/
         └── unit/               # Unit tests (ansible-test)
 ```
 
-## Requirements
-
-- Ansible >= 2.9
-- Python >= 3.9
-
 ## Building the Collection
 
 Build a distributable tarball from the collection source:
 
 ```bash
-ansible-galaxy collection build
+./scripts/ansible/build.sh
 ```
 
 ## Installing the Collection

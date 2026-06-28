@@ -46,3 +46,13 @@ function error() {
     exit 1
 }
 
+function get_namespace() {
+    local galaxy_yml="${1:-galaxy.yml}"
+    grep -E '^namespace:' "$galaxy_yml" | awk '{print $2}' | tr -d '"'\''"'
+}
+
+function get_collection() {
+    local galaxy_yml="${1:-galaxy.yml}"
+    grep -E '^name:' "$galaxy_yml" | awk '{print $2}' | tr -d '"'\''"'
+}
+

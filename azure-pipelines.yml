@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - release/*
+
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildCollection
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '3.11'
+            displayName: Set Python version
+
+          - script: pip install ansible-core
+            displayName: Install Ansible
+
+          - script: ansible-galaxy collection build
+            displayName: Build collection
+
+          - publish: $(System.DefaultWorkingDirectory)
+            artifact: collection
+            displayName: Publish artifact
+
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - job: DeployCollection
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - download: current
+            artifact: collection
+            displayName: Download artifact
+
+          - script: |
+              ARTIFACT=$(ls $(Pipeline.Workspace)/collection/*.tar.gz)
+              curl -X POST -F "file=@${ARTIFACT}" "$(DEPLOY_URL)"
+            displayName: Deploy via curl

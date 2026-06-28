@@ -1,0 +1,38 @@
+name: Release Collection
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: pip install ansible-core
+
+      - name: Build collection
+        run: ansible-galaxy collection build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: collection
+          path: "*.tar.gz"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: collection
+
+      - name: Deploy via curl
+        run: |
+          ARTIFACT=$(ls *.tar.gz)
+          curl -X POST -F "file=@${ARTIFACT}" "${{ secrets.DEPLOY_URL }}"

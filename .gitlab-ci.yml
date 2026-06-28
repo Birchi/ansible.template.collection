@@ -1,0 +1,31 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DEPLOY_URL: "https://your-deploy-url/upload"
+
+build:
+  stage: build
+  tags:
+    - ansible-runner
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release\//'
+  script:
+    - ansible-galaxy collection build
+  artifacts:
+    paths:
+      - "*.tar.gz"
+    expire_in: 1 hour
+
+deploy:
+  stage: deploy
+  tags:
+    - ansible-runner
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release\//'
+  needs:
+    - build
+  script:
+    - ARTIFACT=$(ls *.tar.gz)
+    - curl -X POST -F "file=@${ARTIFACT}" "$DEPLOY_URL"

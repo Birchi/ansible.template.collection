@@ -1,0 +1,13 @@
+namespace: "namespace"
+name: "collection"
+version: "1.0.0"
+readme: "README.md"
+authors:
+    - "Birchi"
+dependencies:
+    "namespace.collection": ">=1.0.0"
+license_file: "LICENSE"
+tags:
+    - collection
+repository: "https://github.com/Birchi/ansible.template.collection"
+
